@@ -49,7 +49,23 @@ public class LikeServiceImplementation implements LikeService{
         return likeResponses;
     }
 
-   
+   @Override
+    public LikeResponse createLike(String postOrCommentId, Likedto likedto) {
+        List<Like> likeList=likeRepo.findBypostorcommentId(postOrCommentId);
+        Like likes=new Like();
+        likes.setPostorcommentId(postOrCommentId);
+        likes.setCreatedAt(LocalDate.now());
+        likes.setLikedBy(likedto.getLikedBy());
+        if(likeList!=null && !(likeList.stream().filter(like->like.getLikedBy().equals(likedto.getLikedBy())).collect(Collectors.toList()).isEmpty()))
+        {
+                log.info("user have already liked it---error");
+                throw new AlreadyLiked("You have already liked it");
+        }
+            Like like = likeRepo.save(likes);
+            log.info("like saved successfully");
+            return new LikeResponse(like.getLikeId(), like.getPostorcommentId(),
+                    userFeign.getUsersById(likedto.getLikedBy()).getBody(), like.getCreatedAt());
+    }
 
     @Override
     public Integer getLikesCount(String postOrCommentId) {

@@ -24,10 +24,10 @@ public class LikeController {
     LikeService likeService;
 
     @GetMapping("/postOrCommentId/{postOrCommentId}/likes")
-    public ResponseEntity<List<LikeResponse>> getLikes(@PathVariable("postOrCommentId") String postOrCommentId)
+    public ResponseEntity<List<LikeResponse>> getLikes(@PathVariable("postOrCommentId") String postOrCommentId,@QueryParam("page") Integer page, @QueryParam("size") Integer size)
     {
         log.info("getting likes");
-        return new ResponseEntity<List<LikeResponse>>(likeService.getLikes(postOrCommentId), HttpStatus.OK);
+        return new ResponseEntity<List<LikeResponse>>(likeService.getLikes(postOrCommentId,page,size), HttpStatus.OK);
 
     }
 @PostMapping("/postOrCommentId/{postOrCommentId}/likes")

@@ -32,9 +32,9 @@ public class LikeServiceImplementation implements LikeService{
    UserFeign userFeign;
 @LoadBalanced
     @Override
-    public List<LikeResponse> getLikes(String postOrCommentId) {
-    
-    List<Like> likeList=likeRepo.findBypostorcommentId(postOrCommentId);
+    public List<LikeResponse> getLikes(String postOrCommentId,Integer page,Integer size) {
+    Pageable pageable= PageRequest.of(page,size);
+    List<Like> likeList=likeRepo.findBypostorcommentId(postOrCommentId,pageable);
         if(likeList==null){
             log.info("No like for the post---error");
             throw new LikeDetailsNotFound("No like for this post");

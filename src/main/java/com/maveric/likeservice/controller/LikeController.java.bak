@@ -51,6 +51,12 @@ public class LikeController {
         return new ResponseEntity<LikeResponse>(likeService.getLikeDetails(postOrCommentId,likeId), HttpStatus.OK);
     }
 
+ @DeleteMapping("/postOrCommentId/{postOrCommentId}/likes/{likeId}")
+    public ResponseEntity<String> removeLike(@PathVariable("postOrCommentId") String postOrCommentId,@PathVariable("likeId") String likeId)
+    {
+        log.info("removing like with id: "+likeId);
+        return new ResponseEntity<String>(likeService.removeLike(postOrCommentId,likeId), HttpStatus.OK);
+    }
     
     }
 

@@ -84,5 +84,14 @@ public class LikeServiceImplementation implements LikeService{
         return new LikeResponse(like.getLikeId(),like.getPostorcommentId(),userFeign.getUsersById(like.getLikedBy()).getBody(),like.getCreatedAt());
     }
 
-    
+    @Override
+    public String removeLike(String postOrCommentId,String likeId) {
+    if(likeRepo.findBylikeId(likeId)==null) {
+        log.info("cant remove, like doesn't exist");
+        throw new LikeDetailsNotFound("Like Does not exist");
+    }
+         likeRepo.deleteById(likeId);
+            log.info("like deleted successfully");
+        return "Like has been successfully removed";
+    }
 }

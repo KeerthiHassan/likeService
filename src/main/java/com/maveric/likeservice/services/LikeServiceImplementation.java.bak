@@ -32,9 +32,9 @@ public class LikeServiceImplementation implements LikeService{
    UserFeign userFeign;
 @LoadBalanced
     @Override
-    public List<LikeResponse> getLikes(String postOrCommentId,Integer page,Integer size) {
-    Pageable pageable= PageRequest.of(page,size);
-    List<Like> likeList=likeRepo.findBypostorcommentId(postOrCommentId,pageable);
+    public List<LikeResponse> getLikes(String postOrCommentId) {
+    
+    List<Like> likeList=likeRepo.findBypostorcommentId(postOrCommentId);
         if(likeList==null){
             log.info("No like for the post---error");
             throw new LikeDetailsNotFound("No like for this post");
@@ -49,7 +49,7 @@ public class LikeServiceImplementation implements LikeService{
         return likeResponses;
     }
 
-    @Override
+   @Override
     public LikeResponse createLike(String postOrCommentId, Likedto likedto) {
         List<Like> likeList=likeRepo.findBypostorcommentId(postOrCommentId);
         Like likes=new Like();
@@ -84,14 +84,5 @@ public class LikeServiceImplementation implements LikeService{
         return new LikeResponse(like.getLikeId(),like.getPostorcommentId(),userFeign.getUsersById(like.getLikedBy()).getBody(),like.getCreatedAt());
     }
 
-    @Override
-    public String removeLike(String postOrCommentId,String likeId) {
-    if(likeRepo.findBylikeId(likeId)==null) {
-        log.info("cant remove, like doesn't exist");
-        throw new LikeDetailsNotFound("Like Does not exist");
-    }
-         likeRepo.deleteById(likeId);
-            log.info("like deleted successfully");
-        return "Like has been successfully removed";
-    }
+    
 }
